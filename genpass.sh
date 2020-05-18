@@ -1,4 +1,17 @@
 #!/bin/bash
+# 
+# usege:
+#   > genpass.sh 15 4
+#
+# option1: [int] 1 - 255
+#   Specify Digit of the Generate Password.
+# option2: [int] 1 - 4
+#   Specify chars.
+#     1 ... only Numbers
+#     2 ... only Numbers and lower alphabets.
+#     3 ... Numbers and alphabets.
+#     4 ... Numbers , alphabets and symbols.
+#
 
 INTEGER=(0 1 2 3 4 5 6 7 8 9)
 LOWER=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
@@ -18,5 +31,5 @@ do
     esac
 done
 echo $string
-			     
-	    
+
+exit 0
