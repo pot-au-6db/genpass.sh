@@ -1,35 +1,61 @@
-#!/bin/bash
-# 
-# usege:
-#   > genpass.sh 15 4
+#!/bin/bash -
+# genpass.sh -
 #
-# option1: [int] 1 - 255
-#   Specify Digit of the Generate Password.
-# option2: [int] 1 - 4
-#   Specify chars.
-#     1 ... only Numbers
-#     2 ... only Numbers and lower alphabets.
-#     3 ... Numbers and alphabets.
-#     4 ... Numbers , alphabets and symbols.
+# Description:
+#      Generate a Random Password with the digit specified in the Params.
+#
+# Params:
+#     -d : Specify the digit to be generated Pass.
+#     -n : Generates a Pass with Only Numbers.
+#     -l : Generates a Pass with Only Numbers and LowerCases letter.
+#     -u : Generates a Pass with Numbers, LowerCases and UpperCases letter.
+#     -s : Generates a Pass with Numbers, LowerCases, UpperCases and some Symbols.
+#
+# Usage:
+#     ./genpass.sh -sd 20
+#     ./genpass.sh -d 15  # default pattern is include all.
 #
 
-INTEGER=(0 1 2 3 4 5 6 7 8 9)
+NUM=(0 1 2 3 4 5 6 7 8 9)
 LOWER=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
 UPPER=(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z)
-SYMBOL=('!' '"' '#' '$' '%' "'" '(' ')' '*' '+' ',' '-' '.' '/' ':' ';' '<' '=' '>' '?' '@' '[' '\' ']' '^' '_' '`' '{' '|' '}' '~')
+SYMBOL=('!' '"' '#' '$' '%' "'" '(' ')' '*' '+'
+	',' '-' '.' '/' ':' ';' '<' '=' '>' '?'
+	'@' '[' '\' ']' '^' '_' '`' '{' '|' '}' '~')
 
-string=()
+declare -a string
 
-for i in `seq 2 ${1:-15}`
+while getopts d:nlus OPT
 do
-    key=$((RANDOM % ${2:-4}))
-    case $key in
-	0 ) string+=${INTEGER[$((RANDOM % 10))]} ;;
-	1 ) string+=${LOWER[$((RANDOM % 26))]} ;;
-	2 ) string+=${UPPER[$((RANDOM % 26))]} ;;
-	3 ) string+=${SYMBOL[$((RANDOM % 31))]} ;;
+    case $OPT in
+        d ) if [[ $OPTARG == "" ]] ; then
+               echo 'Please Specify the Num of GeneratePass digit.'
+               exit 1
+            fi
+            DIGIT=$OPTARG ;;
+        n ) PATTERN=1 ;;
+        l ) PATTERN=2 ;;
+        u ) PATTERN=3 ;;
+        s ) PATTERN=4 ;;
+        * ) echo 'Not Allowed Parameters.'
+            exit 1
+            ;;
     esac
 done
+
+for i in `seq 1 ${DIGIT:-15}`
+do
+
+    dice=$(($RANDOM % ${PATTERN:-4}))
+
+    case $dice in
+        0 ) string+=${NUM[$(($RANDOM % 9))]} ;;
+        1 ) string+=${LOWER[$(($RANDOM % 26))]} ;;
+        2 ) string+=${UPPER[$(($RANDOM % 26))]} ;;
+        3 ) string+=${SYMBOL[$(($RANDOM % 14))]} ;;
+    esac
+done
+
 echo $string
 
 exit 0
